@@ -21,4 +21,4 @@
 
 
 
-All right reserved. 
+All rights reserved. 
