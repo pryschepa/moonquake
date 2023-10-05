@@ -1,0 +1,47 @@
+[
+  {
+    "Station": "A11 PSE",
+    "Latitude": 0.67322,
+    "Longitude": 23.47315
+  },
+  {
+    "Station": "A12 PSE",
+    "Latitude": -3.0099,
+    "Longitude": 336.5752
+  },
+  {
+    "Station": "A14 PSE",
+    "Latitude": -3.64408,
+    "Longitude": 342.52233
+  },
+  {
+    "Station": "A14 ALSEP",
+    "Latitude": -3.64419,
+    "Longitude": 342.52232
+  },
+  {
+    "Station": "A15 PSE",
+    "Latitude": 26.13411,
+    "Longitude": 3.6298
+  },
+  {
+    "Station": "A15 ALSEP",
+    "Latitude": 26.13406,
+    "Longitude": 3.62991
+  },
+  {
+    "Station": "A16 PSE",
+    "Latitude": -8.9759,
+    "Longitude": 15.4986
+  },
+  {
+    "Station": "A16 ALSEP",
+    "Latitude": -8.9759,
+    "Longitude": 15.4986
+  },
+  {
+    "Station": "A17 ALSEP",
+    "Latitude": 20.1923,
+    "Longitude": 30.7655
+  }
+]
