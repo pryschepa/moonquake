@@ -209,7 +209,7 @@ function ThreeScene(props) {
   return (
     <>
       <div className="overlay">
-        <div className="header">Moonquake map 2.0! </div>
+        <div className="header">Moonquake map 2.0!</div>
         <div className="dateSlider">
         {moonquakes[0] ? <DateSlider
             minDate = {moonquakeDataToDate(moonquakes[0])}
