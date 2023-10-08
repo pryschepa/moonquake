@@ -13,6 +13,8 @@ import DateController from '../DateController.jsx';
 import DateSlider from '../DateSlider';
 import { dateToDays, daysToDate, dateToStr } from './utils';
 
+// import moonModel from './Moon_1_3474.glb'
+// console.log(moonModel)
 
 function ThreeScene(props) {
   const sceneRef = useRef(null);
@@ -40,7 +42,7 @@ function ThreeScene(props) {
 
     let load_moon = async () => {
       return await loader.loadAsync( 
-        '../assets/Moon_1_3474.glb', 
+        '/assets/Moon_1_3474.glb', 
         function ( gltf ) {
             // console.log(gltf)
         }, undefined,
@@ -61,7 +63,7 @@ function ThreeScene(props) {
       let bbox = new THREE.Box3().setFromObject(moon);
       radius.current = bbox.getSize(new THREE.Vector3()).x / 2;
 
-      callbackObjectsFromFilename("../assets/moonquakes.json", createObject)
+      callbackObjectsFromFilename("/assets/moonquakes.json", createObject)
 
       // moon.rotateY(2.6)
 
@@ -129,7 +131,7 @@ function ThreeScene(props) {
     animate();
 
     // read moonquakes from file
-    readJson("../assets/nakamura_1979.json").then((data) => {
+    readJson("/assets/nakamura_1979.json").then((data) => {
       setMoonquakes(data)
       TWEEN.update()
       console.log(data)
