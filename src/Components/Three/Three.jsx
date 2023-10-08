@@ -12,6 +12,8 @@ import createSky from './starrySky.js'
 import DateController from '../DateController.jsx';
 import DateSlider from '../DateSlider';
 import { dateToDays, daysToDate, dateToStr } from './utils';
+import Info from '../Info.jsx';
+import ModalWindow from '../ModalWindow.jsx';
 
 // import moonModel from './Moon_1_3474.glb'
 // console.log(moonModel)
@@ -21,6 +23,7 @@ function ThreeScene(props) {
   // const cubes = useRef([]);
   const [tooltipInfo, setTooltipInfo] = useState({hidden: true, name:"", date:0, lat: 0, long: 0})
   const [moonquakes, setMoonquakes] = useState([])
+  const [modalHidden, setModalHidden] = useState(true)
 
   let radius = useRef(0);
 
@@ -63,7 +66,7 @@ function ThreeScene(props) {
       let bbox = new THREE.Box3().setFromObject(moon);
       radius.current = bbox.getSize(new THREE.Vector3()).x / 2;
 
-      callbackObjectsFromFilename("/assets/moonquakes.json", createObject)
+      callbackObjectsFromFilename("/assets/moonquakes.json", createLandingObject)
 
       // moon.rotateY(2.6)
 
@@ -99,6 +102,9 @@ function ThreeScene(props) {
 
           if(i.object.type == 'moonquake'){
             setTooltipInfo({hidden:false, date: dateToStr(moonquakeDataToDate(i.object.data)), lat: i.object.lat, long: i.object.long, mag: i.object.data.Magnitude})
+          }
+          else if (i.object.type == 'customMoonquake'){
+            setTooltipInfo({hidden:false, lat: i.object.lat, long: i.object.long})
           }
           else
             setTooltipInfo({hidden:false, name:i.object.name, lat: i.object.lat, long: i.object.long})
@@ -142,41 +148,95 @@ function ThreeScene(props) {
     };  
   }, []);
 
-  const createObject = (name, long, lat, year, scale=1) => {
-    const geometry = new THREE.SphereGeometry();
+  const createLandingObject = (name, long, lat, year, scale=1) => {
+    // const geometry = new THREE.SphereGeometry();
 
-    const material = new THREE.MeshBasicMaterial({ color: getRandomColor() });
-    const sphere = new THREE.Mesh(geometry, material);
+    // const material = new THREE.MeshBasicMaterial({ color: getRandomColor() });
+    // const sphere = new THREE.Mesh(geometry, material);
 
-    sphere.position.set(...Object.values(geoCoordsTo3D(lat, long, radius.current)))
+    const map = new THREE.TextureLoader().load( '/assets/moon_lander_sprite.png' );
+    map.colorSpace = THREE.SRGBColorSpace;
 
-    sphere.scale.set(scale, scale, scale)
+    const material = new THREE.SpriteMaterial( { map: map, toneMapped: true } );
 
-    sphere.name = name
-    sphere.lat = lat
-    sphere.long = long
-    sphere.year = year
+    const sprite = new THREE.Sprite( material );
 
-    scene.add(sphere);
+    sprite.position.set(...Object.values(geoCoordsTo3D(lat, long, radius.current + 1)))
+
+    sprite.scale.set(5, 5, 5)
+
+    sprite.name = name
+    sprite.lat = lat
+    sprite.long = long
+    sprite.year = year
+
+    scene.add(sprite);
     // return sphere;
   };
 
   const createMoonquake = (name, long, lat, year, data) => {
-    const geometry = new THREE.SphereGeometry();
+    // const geometry = new THREE.SphereGeometry();
 
-    const material = new THREE.MeshBasicMaterial({ color: getRandomColor() });
-    const sphere = new THREE.Mesh(geometry, material);
+    // const material = new THREE.MeshBasicMaterial({ color: getRandomColor() });
+    // const sphere = new THREE.Mesh(geometry, material);
+    const map = new THREE.TextureLoader().load( '/assets/map_pin_sprite.png' );
+    const material = new THREE.SpriteMaterial( { map: map } );
+    map.colorSpace = THREE.SRGBColorSpace;  
 
-    sphere.position.set(...Object.values(geoCoordsTo3D(lat, long, radius.current)))
+    const sprite = new THREE.Sprite( material );
 
-    sphere.name = name
-    sphere.lat = lat
-    sphere.long = long
-    sphere.year = year
-    sphere.data = data
-    sphere.type= 'moonquake'
+    sprite.position.set(...Object.values(geoCoordsTo3D(lat, long, radius.current + 1)))
 
-    return sphere;
+    sprite.scale.set(3, 3, 3)
+
+    sprite.name = name
+    sprite.lat = lat
+    sprite.long = long
+    sprite.year = year
+    sprite.data = data
+    sprite.type= 'customMoonquake'
+
+    // sphere.position.set(...Object.values(geoCoordsTo3D(lat, long, radius.current)))
+
+    // sphere.name = name
+    // sphere.lat = lat
+    // sphere.long = long
+    // sphere.year = year
+    // sphere.data = data
+    // sphere.type= 'moonquake'
+
+    return sprite;
+  }
+
+  const createCustomMoonquake = (long, lat) => {
+    // const geometry = new THREE.SphereGeometry();
+
+    // const material = new THREE.MeshBasicMaterial({ color: getRandomColor() });
+    // const sphere = new THREE.Mesh(geometry, material);
+    const map = new THREE.TextureLoader().load( '/assets/map_pin_sprite.png' );
+    const material = new THREE.SpriteMaterial( { map: map } );
+    map.colorSpace = THREE.SRGBColorSpace;  
+
+    const sprite = new THREE.Sprite( material );
+
+    sprite.position.set(...Object.values(geoCoordsTo3D(lat, long, radius.current + 1)))
+
+    sprite.scale.set(3, 3, 3)
+
+    sprite.lat = lat
+    sprite.long = long
+    sprite.type= 'moonquake'
+
+    // sphere.position.set(...Object.values(geoCoordsTo3D(lat, long, radius.current)))
+
+    // sphere.name = name
+    // sphere.lat = lat
+    // sphere.long = long
+    // sphere.year = year
+    // sphere.data = data
+    // sphere.type= 'moonquake'
+
+    return sprite;
   }
 
   function changeDate(startDate, endDate){
@@ -208,9 +268,20 @@ function ThreeScene(props) {
     }
   }
 
+  const onModalClose = () => {
+    setModalHidden(true)
+  }
+
+  const onModalAdd = (long, lat) => {
+    let sprite = createCustomMoonquake(long, lat)
+    scene.add(sprite)
+    setModalHidden(true)
+  }
+
   return (
     <>
       <div className="overlay">
+        {modalHidden ? null : <ModalWindow hidden={modalHidden} onAdd={onModalAdd} onClose={onModalClose}></ModalWindow>}
         <div className="header">Moonquake map 2.0! </div>
         <div className="dateSlider">
         {moonquakes[0] ? <DateSlider
@@ -222,8 +293,9 @@ function ThreeScene(props) {
         </div>
         
         <Tooltip hidden={tooltipInfo.hidden} name={tooltipInfo.name} year={tooltipInfo.date} long={tooltipInfo.long} lat={tooltipInfo.lat} mag={tooltipInfo.mag}/>
+        <Info></Info>
 
-        <button className='overlayButton' onClick={(e) => {createObject("anObject", 10, 10, 10, 1)}}>Create Object</button>
+        <button className='overlayButton' onClick={(e) => {setModalHidden(false)}}>Add your own moonquake!</button>
         <div className="footer"></div>
       </div>
       <div ref={sceneRef}></div>

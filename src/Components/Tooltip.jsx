@@ -5,7 +5,7 @@ function Tooltip(props){
     return (
         <>  
         {props.hidden ? null : <div className="tooltip">
-                Selected moonquake <br />
+                Information <br />
                 { props.name ? <>Station name: {props.name} <br/></> : null}
                 { props.year? <> Date: {props.year} <br/></> : null}
                 { props.lat ? <>Latitude: {props.lat} <br/> </> : null}

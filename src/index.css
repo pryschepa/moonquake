@@ -1,6 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Mina&family=Montserrat:wght@200&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Mina&family=Montserrat:wght@200&family=Rubik+Moonrocks&display=swap');
 
+@media only screen and (max-width: 600px) {
+  .infoContainer{
+    grid-row: 1 /spans 3;
+  }
+}
+
 #root{
   padding: 0;
   margin: 0;
@@ -34,7 +40,7 @@ button{
 
 .header{
   grid-row: 1;
-  grid-column: 2;
+  grid-column: 1/ span 3;
 
   font-family: 'Rubik Moonrocks', cursive;
   color: white;
@@ -64,39 +70,87 @@ button{
 
 .overlayButton{
   display: block;
+  box-sizing: border-box;
 
-  width: 100px;
-  height: 40px;
+  border:none;
+  color:black;
+
+  width: auto;
+  height: auto;
+  padding: 10px;
 
   background-color: #4a7fc560;
   border: 1px solid #00eeff;
   color:#fff;
-  border-radius: 5px;
 
   grid-row: 3;
   grid-column: 3;
+  margin: auto;
+
+  width: 80%;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.infoContainer{
+  box-sizing: border-box;
+  background-color: #4a7fc560;
+  border: 1px solid #00eeff;
+  color:#fff;
+
+  width: 80%;
+
+  grid-row: 4;
+  grid-column: 3;
+
+  text-align: left;
+  padding: 10px;
+
+  display: flex;
+  flex-direction: column;
+  gap:10px;
+  border-radius: 5px;
+
+  margin: auto;
+}
+
+.flexRow > img{
+  width: 30px;
+}
+
+.flexRow{
+  display: flex;
+  flex-direction: row;
+  justify-content: baseline;
+  gap:10px;
+  align-items: center;
+
+  margin: 0;padding: 0;
 }
 
 .dateSlider{
   grid-row: 5;
-  grid-column: 2;
+  grid-column: 1 / span 3;
   color: white;
-}
 
-.dateControls{
-  grid-row: 3;
-  grid-column: 1;
+  width: 90%;
+  margin: auto;
 }
 
 .tooltip{
-  position: absolute;
+  box-sizing: border-box;
   text-align: justify;
   
-  padding:10px 20px;
-  margin: 10px;
+  padding:10px;
   background-color: #4a7fc560;
   border: 1px solid #00eeff;
   color:#fff;
+
+  width: 80%;
+
+  grid-row: 4;
+  grid-column: 1;
+  margin: auto;
   border-radius: 5px;
 }
 
@@ -119,4 +173,83 @@ button{
   width: 100%;
   display: flex;
   justify-content: space-between;
+}
+
+.modalWindow{
+  z-index: 10;
+
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+
+  background-color: #00000080;
+
+  backdrop-filter: blur(5px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.formContainer{
+  background-color: #4a7fc560;
+  border: 1px solid #00eeff;
+  color:#fff;
+
+  width: auto;
+  height: auto;
+
+  min-width: 300px;
+
+  text-align: left;
+  padding: 10px 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap:10px;
+  border-radius: 5px;
+
+  margin: auto;
+}
+
+.formFlexRow{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap:10px;
+  align-items: center;
+
+  margin: 0;padding: 0;
+}
+
+h2{
+  margin: 0;padding: 0;
+}
+
+.formButton{
+  display: block;
+  box-sizing: border-box;
+
+  border:none;
+  color:black;
+
+  width: auto;
+  height: auto;
+  padding: 10px;
+
+  background-color: #4a7fc560;
+  border: 1px solid #00eeff;
+  color:#fff;
+
+  grid-row: 3;
+  grid-column: 3;
+  margin: auto;
+
+  width: 80%;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.formFlexRow > input{
+  width: 80%;
 }
