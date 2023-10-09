@@ -21,7 +21,7 @@ import ModalWindow from '../ModalWindow.jsx';
 function ThreeScene(props) {
   const sceneRef = useRef(null);
   // const cubes = useRef([]);
-  const [tooltipInfo, setTooltipInfo] = useState({hidden: true, name:"", date:0, lat: 0, long: 0})
+  const [tooltipInfo, setTooltipInfo] = useState({hidden: true, name:"", date:0, lat: 0, long: 0, mag: 0})
   const [moonquakes, setMoonquakes] = useState([])
   const [modalHidden, setModalHidden] = useState(true)
 
@@ -101,13 +101,14 @@ function ThreeScene(props) {
           }
 
           if(i.object.type == 'moonquake'){
-            setTooltipInfo({hidden:false, date: dateToStr(moonquakeDataToDate(i.object.data)), lat: i.object.lat, long: i.object.long, mag: i.object.data.Magnitude})
+            setTooltipInfo({hidden:false, date: dateToStr(moonquakeDataToDate(i.object.data)), lat: i.object.lat, long: i.object.long, mag: i.object.mag})
           }
           else if (i.object.type == 'customMoonquake'){
-            setTooltipInfo({hidden:false, lat: i.object.lat, long: i.object.long})
+            setTooltipInfo({hidden:false, lat: i.object.lat, long: i.object.long, mag: i.object.mag})
           }
-          else
-            setTooltipInfo({hidden:false, name:i.object.name, lat: i.object.lat, long: i.object.long})
+          else {
+            setTooltipInfo({hidden:false, name:i.object.name, lat: i.object.lat, long: i.object.long, mag: i.object.mag})
+          }
 
           break;
         }
@@ -174,7 +175,7 @@ function ThreeScene(props) {
     // return sphere;
   };
 
-  const createMoonquake = (name, long, lat, year, data) => {
+  const createMoonquake = (name, long, lat, year, data, mag) => {
     // const geometry = new THREE.SphereGeometry();
 
     // const material = new THREE.MeshBasicMaterial({ color: getRandomColor() });
@@ -194,7 +195,8 @@ function ThreeScene(props) {
     sprite.long = long
     sprite.year = year
     sprite.data = data
-    sprite.type= 'customMoonquake'
+    sprite.mag = mag;
+    sprite.type= 'moonquake'
 
     // sphere.position.set(...Object.values(geoCoordsTo3D(lat, long, radius.current)))
 
@@ -208,7 +210,7 @@ function ThreeScene(props) {
     return sprite;
   }
 
-  const createCustomMoonquake = (long, lat) => {
+  const createCustomMoonquake = (long, lat, mag) => {
     // const geometry = new THREE.SphereGeometry();
 
     // const material = new THREE.MeshBasicMaterial({ color: getRandomColor() });
@@ -225,6 +227,7 @@ function ThreeScene(props) {
 
     sprite.lat = lat
     sprite.long = long
+    sprite.mag = mag
     sprite.type= 'moonquake'
 
     // sphere.position.set(...Object.values(geoCoordsTo3D(lat, long, radius.current)))
@@ -247,7 +250,7 @@ function ThreeScene(props) {
       if (date >= startDate && date <= endDate) {
         if (!object.inScene) {
 
-          let mesh = createMoonquake('Moonquake', object.Long, object.Lat, object.Year, object)
+          let mesh = createMoonquake('Moonquake', object.Long, object.Lat, object.Year, object, object.Magnitude)
           scene.add(mesh);
 
           object.inScene = true; // Track whether the object is in the scene.
@@ -272,8 +275,8 @@ function ThreeScene(props) {
     setModalHidden(true)
   }
 
-  const onModalAdd = (long, lat) => {
-    let sprite = createCustomMoonquake(long, lat)
+  const onModalAdd = (long, lat, mag) => {
+    let sprite = createCustomMoonquake(long, lat, mag)
     scene.add(sprite)
     setModalHidden(true)
   }
